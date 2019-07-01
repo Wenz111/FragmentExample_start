@@ -3,11 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="@color/my_fragment_color"
     tools:context=".RatingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/fragment_header"
@@ -17,12 +15,12 @@
         android:text="@string/question_song"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
-    <RadioGroup
-        android:id="@+id/radio_group"
+    <RatingBar
+        android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-
+        android:saveEnabled="true"
+        android:isIndicator="false"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:numStars="5" />
 </LinearLayout>
