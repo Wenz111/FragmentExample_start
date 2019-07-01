@@ -23,12 +23,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SimpleFragment.OnFragmentInteractionListener {
 
     private Button mButton;
     private boolean isFragmentDisplayed = false;
     static final String STATE_FRAGMENT = "state_of_fragment";
+    static final String STATE_CHOICE = "user_choice";
+
+
+    // The radio button choice default is 2 = (no choice).
+    // Initialize the radio button choice to the default.
+    private int mRadioButtonChoice = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mButton = findViewById(R.id.open_button);
+
+        // If returning from a configuration change, get the
+        // fragment state and set the button text.
+        if (savedInstanceState != null) {
+            isFragmentDisplayed = savedInstanceState.getBoolean(STATE_FRAGMENT);
+            mRadioButtonChoice = savedInstanceState.getInt(STATE_CHOICE);
+            if (isFragmentDisplayed) {
+                // If the fragment is displayed, change button to "close".
+                mButton.setText(R.string.close);
+            }
+        }
+
         // Set the click listener for the button.
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayFragment() {
-        SimpleFragment simpleFragment = SimpleFragment.newInstance();
+        SimpleFragment simpleFragment = SimpleFragment.newInstance(mRadioButtonChoice);
         // TODO: Get the FragmentManager and start a transaction.
         // Get the FragmentManager and start a transaction.
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -60,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Add the SimpleFragment.
         // Add the SimpleFragment.
         fragmentTransaction.add(R.id.fragment_container, simpleFragment).addToBackStack(null).commit();
-// Update the Button text.
-        mButton.setText(R.string.close);
-// Set boolean flag to indicate fragment is open.
-        isFragmentDisplayed = true;
+        // Update the Button text.
+                mButton.setText(R.string.close);
+        // Set boolean flag to indicate fragment is open.
+                isFragmentDisplayed = true;
     }
 
     public void closeFragment() {
@@ -96,5 +115,13 @@ public class MainActivity extends AppCompatActivity {
                 mButton.setText(R.string.close);
             }
         }
+    }
+
+    @Override
+    public void onRadioButtonChoice(int choice) {
+        // Keep the radio button choice to pass it back to the fragment.
+        mRadioButtonChoice = choice;
+        Toast.makeText(this, "Choice is " + Integer.toString(choice),
+                Toast.LENGTH_SHORT).show();
     }
 }
